@@ -17,12 +17,17 @@
 4. Open **Website words & contact info** and change **E-board term label**, **President's name**, and **Collaboration inbox**.
 5. Remove previous members' access to the editor/repository; invite the new media or tech chairs. Never share passwords.
 
-## Adding an upcoming event
+## Adding upcoming AND past events
 
-1. Select **Events & meetings** → Add an item.
-2. Enter the event **title**, **date**, **location**, and optional **RSVP link**.
-3. Save. The event appears on the homepage and Campus Life page.
-4. Events whose dates have passed disappear automatically from the upcoming list; you can still delete old entries when convenient.
+1. Select **Events — upcoming & past** → Add an item.
+2. Fill in the **title**, **date**, **location**, and optional **time** and **description**. Dates use `YYYY-MM-DD` (for example, `2026-11-18`).
+3. Optionally upload an **event flyer/photo** or paste an **RSVP, photo album, or recap URL**. Without a photo, the website uses a colorful AAA placeholder.
+4. Save. **Today’s and future events** appear on the Events page under **Coming Up**; up to two appear on the homepage.
+5. **Past events** automatically move into the archive under their semester: **Spring (Jan–Apr), Summer (May–Jul), or Fall (Aug–Dec)**. Visitors can choose a semester from the dropdown.
+
+**Don't delete an event when it's over.** Keeping it in the list preserves the archive. To add old events from previous semesters, enter their real past dates and upload photos you have permission to post. The archive builds itself.
+
+**Preview examples:** The `content/events.example.json` file contains fictional, clearly labeled demonstration events. It is not displayed publicly. Use it as a reference for field names, **not** as actual AAA history.
 
 ## Updating the Instagram section
 
@@ -50,7 +55,7 @@ Open **Website words & contact info** and change the **President's name**, **Col
 - [ ] Confirm the new e-board's names, roles, and headshots.
 - [ ] Confirm the president's preferred collaboration inbox.
 - [ ] Update the e-board term label.
-- [ ] Remove old events and add new ones.
+- [ ] Add new events, check past semester photos, and keep old entries in the archive.
 - [ ] Update Instagram highlights.
 - [ ] Remove access for past officers and grant it to current maintainers.
 

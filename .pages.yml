@@ -99,7 +99,7 @@ content:
         type: string
 
   - name: events
-    label: Events & meetings
+    label: Events — upcoming & past
     type: file
     path: content/events.json
     format: json
@@ -114,6 +114,12 @@ content:
         options:
           time: false
           format: yyyy-MM-dd
+      - name: time
+        label: Time (optional, e.g. 6:00–8:00 PM)
+        type: string
+      - name: image
+        label: Event flyer or photo (optional)
+        type: image
       - name: location
         label: Location
         type: string
@@ -121,7 +127,7 @@ content:
         label: Short description
         type: text
       - name: url
-        label: RSVP / event link (optional)
+        label: RSVP, photos, or event recap link (optional)
         type: string
 
   - name: posts

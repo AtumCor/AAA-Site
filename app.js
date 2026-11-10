@@ -71,7 +71,7 @@
   }
   function getRoute() {
     const path = window.location.hash.replace(/^#\/?/, '').split('?')[0].replace(/\/$/, '');
-    return ['about', 'board', 'campus', 'contact'].includes(path) ? path : 'home';
+    return path === 'campus' ? 'events' : (['about', 'board', 'events', 'contact'].includes(path) ? path : 'home');
   }
   function btn(label, route, otherClass = '') {
     return `<a class="button button-dark ${otherClass}" href="#/${route === 'home' ? '' : route}" data-route="${route}"><span>${escapeHtml(label)}</span>${icons.arrow}</a>`;
@@ -110,11 +110,7 @@
     </article>`;
   }
   function eventSection(limit = 3) {
-    const events = content.events.slice().filter(e => e && e.title).sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999'));
-    // Show future events first; retain old ones if editors haven't published new dates.
-    const today = new Date();
-    const dateKey = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
-    const upcoming = events.filter(e => !e.date || e.date >= dateKey);
+    const { upcoming } = getEvents();
     if (!upcoming.length) return `<div class="empty-events"><div class="empty-icon">✳</div><h3>Something good is always happening.</h3><p>Our latest meeting and event announcements live on Instagram. Follow along so you don't miss the next one.</p><a href="${instaLink()}" target="_blank" rel="noopener noreferrer" class="text-link">See what's happening ${icons.external}</a></div>`;
     return `<div class="event-list">${upcoming.slice(0, limit).map(renderEvent).join('')}</div>`;
   }
@@ -142,7 +138,7 @@
         <div class="intro-copy"><div class="mini-sun" aria-hidden="true">✳</div><p>${escapeHtml(s.mission)}</p><a href="#/about" data-route="about" class="text-link">More about our story ${icons.arrow}</a></div>
       </section>
       <section class="values-strip section-wrap"><div><span>01 /</span><strong>Find your people</strong></div><div><span>02 /</span><strong>Celebrate culture</strong></div><div><span>03 /</span><strong>Make an impact</strong></div></section>
-      <section class="section-wrap section-space happenings"><div class="section-top">${sectionTag('03', 'ON THE CALENDAR')}<a href="#/campus" data-route="campus" class="text-link">Explore campus life ${icons.arrow}</a></div><h2 class="section-title">What’s <span class="highlighted">happening?</span></h2>${eventSection(2)}</section>
+      <section class="section-wrap section-space happenings"><div class="section-top">${sectionTag('03', 'ON THE CALENDAR')}<a href="#/events" data-route="events" class="text-link">Explore all events ${icons.arrow}</a></div><h2 class="section-title">What’s <span class="highlighted">happening?</span></h2>${eventSection(2)}</section>
       <section class="wide-cta section-wrap"><div class="cta-graphic" aria-hidden="true"><span>✳</span></div><div><span class="mini-caps">NEW FRIENDS START SOMEWHERE</span><h2>Come as you are.<br/>Leave with community.</h2><p>Whether it’s your first event or your fiftieth, there’s room for you.</p></div><a href="${instaLink()}" target="_blank" rel="noopener noreferrer" class="round-cta" aria-label="Visit our Instagram">${icons.external}</a></section>
     `;
   }
@@ -179,12 +175,86 @@
     const colors = ['post-a', 'post-b', 'post-c', 'post-d'];
     return `<a class="post-card ${colors[index % colors.length]}" href="${url}" target="_blank" rel="noopener noreferrer" aria-label="View ${title} on Instagram"><div class="post-media">${img ? `<img loading="lazy" src="${img}" alt="${title}"/>` : `<div class="post-placeholder"><span>AAA</span><b>✳</b><small>THE MOMENTS THAT MAKE US</small></div>`}<span class="post-instagram">${icons.insta}</span></div><div class="post-info"><span>${title}</span><span>${icons.external}</span></div><p>${caption}</p></a>`;
   }
-  function campus() {
+  // Events use date to sort themselves. Spring = Jan–Apr, Summer = May–Jul, Fall = Aug–Dec.
+  // Moving a past event into the archive never requires a manual change by an editor.
+  function getEvents() {
+    const date = new Date();
+    const today = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    const list = content.events.filter(event => event && event.title && typeof event.title === 'string');
+    return {
+      upcoming: list.filter(event => !/^\d{4}-\d{2}-\d{2}$/.test(event.date || '') || event.date >= today)
+        .sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999')),
+      past: list.filter(event => /^\d{4}-\d{2}-\d{2}$/.test(event.date || '') && event.date < today)
+        .sort((a, b) => b.date.localeCompare(a.date))
+    };
+  }
+  function eventSemester(raw) {
+    const year = Number(raw.slice(0, 4));
+    const month = Number(raw.slice(5, 7));
+    const term = month <= 4 ? 'Spring' : month <= 7 ? 'Summer' : 'Fall';
+    return `${term} ${year}`;
+  }
+  function eventPhoto(event, index) {
+    const src = imageUrl(event.image);
+    return src
+      ? `<img src="${src}" alt="${escapeHtml(event.title)}" loading="lazy" />`
+      : `<div class="event-art event-art-${index % 4}" aria-hidden="true"><span class="event-art-flower">✳</span><span class="event-art-mark">AAA<span>.</span></span><small>YOUR PEOPLE, YOUR PLACE</small></div>`;
+  }
+  function upcomingCard(event, index) {
+    const d = eventDate(event.date);
+    const name = escapeHtml(event.title);
+    const location = escapeHtml(event.location || 'Location to be announced');
+    const details = event.description ? `<p>${escapeHtml(event.description)}</p>` : '';
+    const link = event.url && /^https:\/\//i.test(event.url)
+      ? `<a class="event-card-link" href="${externalUrl(event.url)}" target="_blank" rel="noopener noreferrer">Event details ${icons.external}</a>`
+      : `<a class="event-card-link" href="${instaLink()}" target="_blank" rel="noopener noreferrer">Check Instagram ${icons.external}</a>`;
+    return `<article class="event-feature-card" style="--i:${index}">
+      <div class="event-feature-media">${eventPhoto(event, index)}<span class="event-feature-sticker">UP NEXT ✳</span></div>
+      <div class="event-feature-body"><div class="event-feature-date"><strong>${d.day}</strong><span>${d.month}<small>${escapeHtml(d.full)}</small></span></div>
+      <div class="event-feature-copy"><h3>${name}</h3>${details}<div class="event-meta">${icons.map}<span>${location}</span>${event.time ? `<span class="event-meta-divider">·</span><span>${escapeHtml(event.time)}</span>` : ''}</div></div>
+      ${link}</div></article>`;
+  }
+  function archiveCard(event, index) {
+    const d = eventDate(event.date);
+    const name = escapeHtml(event.title);
+    const url = event.url && /^https:\/\//i.test(event.url)
+      ? `<a href="${externalUrl(event.url)}" class="archive-card-link" target="_blank" rel="noopener noreferrer" aria-label="View photos or recap of ${name}">${icons.external}</a>` : '';
+    return `<article class="archive-card" style="--i:${index}">
+      <div class="archive-card-media">${eventPhoto(event, index)}<span class="archive-card-date">${escapeHtml(d.full)}</span>${url}</div>
+      <div class="archive-card-copy"><h4>${name}</h4>${event.description ? `<p>${escapeHtml(event.description)}</p>` : ''}<div class="archive-card-location">${icons.map}<span>${escapeHtml(event.location || 'AAA at Ohio State')}</span></div></div>
+    </article>`;
+  }
+  function archiveMarkup(past) {
+    if (!past.length) return `<div class="archive-empty"><div class="archive-empty-art" aria-hidden="true">✺</div><div><span class="mini-caps">MEMORIES IN THE MAKING</span><h3>Our scrapbook starts here.</h3><p>Photos and recaps from previous semesters will appear here as the board adds past events. Until then, take a look at our Instagram.</p><a class="text-link" href="${instaLink()}" target="_blank" rel="noopener noreferrer">Explore AAA memories ${icons.external}</a></div></div>`;
+    const groups = new Map();
+    past.forEach(event => {
+      const semester = eventSemester(event.date);
+      if (!groups.has(semester)) groups.set(semester, []);
+      groups.get(semester).push(event);
+    });
+    const options = [...groups.keys()].map(semester => `<option value="${escapeHtml(semester)}">${escapeHtml(semester)} (${groups.get(semester).length})</option>`).join('');
+    const sections = [...groups].map(([semester, events]) => `<section class="archive-semester" data-semester="${escapeHtml(semester)}"><div class="archive-term-head"><h3>${escapeHtml(semester)}</h3><span>${events.length} event${events.length === 1 ? '' : 's'} ✳</span></div><div class="archive-grid">${events.map(archiveCard).join('')}</div></section>`).join('');
+    return `<div class="archive-tools"><label for="semester-filter">Browse by semester</label><select id="semester-filter"><option value="all">All semesters (${past.length})</option>${options}</select></div><div class="archive-groups">${sections}</div>`;
+  }
+  function events() {
     const s = content.site;
     const ig = instaLink();
-    return `<section class="page-hero section-wrap campus-hero">${sectionTag('01', 'CAMPUS LIFE')}<div class="page-heading-row"><h1>GOOD TIMES.<br/><span class="serif-italic">Good people.</span></h1><div class="page-heading-note"><div class="asterisk">✺</div><p>Come for the events.<br/>Stay for the friends.</p></div></div></section>
-      <section class="section-wrap campus-events"><div class="section-top">${sectionTag('02', 'WHAT’S NEXT?')}<span class="subtle-caption">All events are open to the community.</span></div><h2 class="section-title">See you <span class="highlighted">there.</span></h2>${eventSection(8)}</section>
-      <section class="social-section section-wrap section-space"><div class="section-top">${sectionTag('03', 'THE INSTAGRAM JOURNAL')}<a href="${ig}" target="_blank" rel="noopener noreferrer" class="text-link">@${escapeHtml(s.instagramUsername)} ${icons.external}</a></div><div class="social-heading"><h2>Little moments.<br/><em>Big memories.</em></h2><p>Follow along for event announcements, photo drops, and all the everyday moments in between.</p></div>${content.posts.length ? `<div class="post-grid">${content.posts.filter(p => p && (p.url || p.title)).map(postCard).join('')}</div>` : `<div class="instagram-empty"><div class="instagram-mockups" aria-hidden="true"><div class="mockup mockup-1"><span>✳</span><b>AAA</b></div><div class="mockup mockup-2"><span>CREATING<br/>MEMORIES<br/>TOGETHER.</span><b>✺</b></div><div class="mockup mockup-3"><span>✷</span><small>YOUR COMMUNITY.</small></div></div><div class="instagram-empty-copy"><span class="mini-caps">YOUR DIRECT LINE TO AAA</span><h3>Catch our latest<br/>on Instagram.</h3><p>New updates are on our profile. Add Instagram post links and photos in the editor to feature them here.</p><a href="${ig}" target="_blank" rel="noopener noreferrer" class="button button-dark">Explore @${escapeHtml(s.instagramUsername)} ${icons.external}</a></div></div>`}<div class="social-footer"><a href="${ig}" target="_blank" rel="noopener noreferrer">${icons.insta} <span>FOLLOW ALONG @${escapeHtml(s.instagramUsername)}</span> ${icons.arrow}</a></div></section>`;
+    const {upcoming, past} = getEvents();
+    const posts = content.posts.filter(post => post && (post.url || post.title));
+    return `<section class="page-hero section-wrap events-hero">${sectionTag('01', 'THE AAA CALENDAR')}<div class="page-heading-row"><h1>LET'S MAKE<br/><span class="serif-italic">memories.</span></h1><div class="page-heading-note"><div class="asterisk">✳</div><p>Something to look forward to.<br/>Something to look back on.</p></div></div><div class="events-hero-strip"><span>THE NEXT CHAPTER IS OURS</span><span>✳ &nbsp; SHOW UP / CONNECT / REPEAT</span></div></section>
+      <section class="section-wrap events-upcoming" id="upcoming"><div class="section-top">${sectionTag('02', 'COMING UP')}<a href="${ig}" class="text-link" target="_blank" rel="noopener noreferrer">Latest updates on Instagram ${icons.external}</a></div><div class="events-section-heading"><h2 class="section-title">See you <span class="highlighted">soon.</span></h2><p>Join us for what's next. Dates, locations, and details are updated by our e-board.</p></div>${upcoming.length ? `<div class="event-feature-grid">${upcoming.map(upcomingCard).join('')}</div>` : `<div class="events-upcoming-empty"><div class="upcoming-empty-star" aria-hidden="true">✳</div><div><span class="mini-caps">MORE GOOD THINGS AHEAD</span><h3>Something's coming together.</h3><p>No upcoming events are posted yet. Our Instagram is the best place to hear about the next get-together.</p><a class="button button-dark" href="${ig}" target="_blank" rel="noopener noreferrer">Find the latest updates ${icons.external}</a></div></div>`}</section>
+      <section class="events-archive-band"><div class="section-wrap events-archive" id="archive"><div class="section-top">${sectionTag('03', 'THE AAA SCRAPBOOK')}<span class="subtle-caption">One semester at a time.</span></div><div class="events-section-heading"><h2 class="section-title">The good <span class="highlighted">old days.</span></h2><p>A look back at the people, celebrations, and little moments that made each semester memorable.</p></div>${archiveMarkup(past)}</div></section>
+      <section class="social-section section-wrap section-space"><div class="section-top">${sectionTag('04', 'MORE MOMENTS ON INSTAGRAM')}<a href="${ig}" target="_blank" rel="noopener noreferrer" class="text-link">@${escapeHtml(s.instagramUsername)} ${icons.external}</a></div><div class="social-heading"><h2>Memories worth<br/><em>sharing.</em></h2><p>Keep up with everything happening between events, from announcements to photo drops.</p></div>${posts.length ? `<div class="post-grid">${posts.map(postCard).join('')}</div>` : `<div class="instagram-empty"><div class="instagram-mockups" aria-hidden="true"><div class="mockup mockup-1"><span>✳</span><b>AAA</b></div><div class="mockup mockup-2"><span>CREATING<br/>MEMORIES<br/>TOGETHER.</span><b>✺</b></div><div class="mockup mockup-3"><span>✷</span><small>YOUR COMMUNITY.</small></div></div><div class="instagram-empty-copy"><span class="mini-caps">YOUR DIRECT LINE TO AAA</span><h3>Catch our latest<br/>on Instagram.</h3><p>Browse our profile for updates, or feature favorite posts here using the visual editor.</p><a href="${ig}" target="_blank" rel="noopener noreferrer" class="button button-dark">Explore @${escapeHtml(s.instagramUsername)} ${icons.external}</a></div></div>`}<div class="social-footer"><a href="${ig}" target="_blank" rel="noopener noreferrer">${icons.insta} <span>FOLLOW ALONG @${escapeHtml(s.instagramUsername)}</span> ${icons.arrow}</a></div></section>
+      <section class="section-wrap events-bottom-cta"><div><span class="mini-caps">HAVE AN IDEA FOR THE NEXT EVENT?</span><h2>Let's make it <em>happen.</em></h2><p>We love collaborating with other student organizations and campus partners.</p></div>${btn('Plan something with us', 'contact')}</section>`;
+  }
+  function hookEventsFilter() {
+    const filter = $('#semester-filter');
+    if (!filter) return;
+    filter.addEventListener('change', () => {
+      document.querySelectorAll('.archive-semester').forEach(section => {
+        section.hidden = filter.value !== 'all' && section.dataset.semester !== filter.value;
+      });
+    });
   }
   function contact() {
     const s = content.site;
@@ -194,8 +264,8 @@
       <section class="contact-grid section-wrap"><div class="contact-card contact-primary"><span class="mini-caps">FOR COLLABORATIONS & PARTNERSHIPS</span><div class="contact-icon">${icons.mail}</div><div><h2>Start a conversation.</h2><p>Reach out to ${presidentText} about hosting an event together, partnering with AAA, or sharing an idea.</p><a href="${escapeHtml(mailto(presidentEmail, 'AAA collaboration inquiry'))}" class="email-link">${escapeHtml(presidentEmail)} ${icons.external}</a>${s.contactNote ? `<p class="contact-footnote">${escapeHtml(s.contactNote)}</p>` : ''}</div></div><div class="contact-card contact-secondary"><span class="mini-caps">OR FIND US HERE</span><div class="small-contact-item"><span class="small-icon">${icons.insta}</span><div><span>Instagram</span><a href="${instaLink()}" target="_blank" rel="noopener noreferrer">@${escapeHtml(s.instagramUsername)} ↗</a></div></div><div class="small-contact-item"><span class="small-icon">${icons.mail}</span><div><span>General questions</span><a href="mailto:${escapeHtml(cleanEmail(s.generalEmail))}">${escapeHtml(s.generalEmail)} ↗</a></div></div><div class="small-contact-item"><span class="small-icon">${icons.map}</span><div><span>Find us</span><strong>${escapeHtml(s.school)}<br/>${escapeHtml(s.campusLocation)}</strong></div></div><div class="contact-mini-graphic" aria-hidden="true">✳ <span>HI, FRIEND!</span></div></div></section>
       <section class="section-wrap contact-form-section"><div class="form-head">${sectionTag('02', 'SEND A QUICK NOTE')}<h2>Tell us your <em>idea.</em></h2><p>Fill this out and we’ll prepare an email in your default email app. Nothing is sent until you hit Send there.</p></div><form id="collab-form" class="contact-form"><div class="form-line"><label>Your name <input name="name" type="text" autocomplete="name" placeholder="Your name" maxlength="100" required /></label><label>Your email <input name="email" type="email" autocomplete="email" placeholder="you@example.com" maxlength="150" required /></label></div><label>What’s on your mind? <select name="kind"><option value="Campus collaboration">Campus collaboration</option><option value="Event partnership">Event partnership</option><option value="Joining AAA">Joining AAA</option><option value="Something else">Something else</option></select></label><label>Your message <textarea name="message" placeholder="Tell us a little about your idea..." rows="5" maxlength="4000" required></textarea></label><button type="submit" class="button button-dark send-button">Open email draft ${icons.arrow}</button><div id="form-result" class="form-result" role="status" aria-live="polite"></div></form></section>`;
   }
-  const pages = { home, about, board, campus, contact };
-  const titles = { home: 'Home', about: 'Our Story', board: 'Our Board', campus: 'Campus Life', contact: 'Contact' };
+  const pages = { home, about, board, events, contact };
+  const titles = { home: 'Home', about: 'Our Story', board: 'Our Board', events: 'Events', contact: 'Contact' };
 
   function hookContactForm() {
     const form = $('#collab-form');
@@ -227,6 +297,7 @@
     main.dataset.page = route;
     updateNav(route);
     hookContactForm();
+    hookEventsFilter();
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
   async function navigate() {

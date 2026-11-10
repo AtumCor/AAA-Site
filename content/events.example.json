@@ -1,0 +1,56 @@
+[
+  {
+    "title": "EXAMPLE ONLY — Fall Welcome Social",
+    "date": "2026-12-03",
+    "time": "6:00–8:00 PM",
+    "location": "Location to be confirmed",
+    "description": "Sample upcoming event to demonstrate the card layout. Replace with a real event or delete before publishing.",
+    "image": "",
+    "url": ""
+  },
+  {
+    "title": "EXAMPLE ONLY — Community Game Night",
+    "date": "2027-02-12",
+    "time": "7:00 PM",
+    "location": "Location to be confirmed",
+    "description": "Sample upcoming event. Dates, names, and details here are fictional.",
+    "image": "",
+    "url": ""
+  },
+  {
+    "title": "EXAMPLE ONLY — Spring Culture Night",
+    "date": "2026-03-20",
+    "time": "",
+    "location": "Example venue",
+    "description": "Sample past event for the semester archive; not an actual AAA event listing.",
+    "image": "",
+    "url": ""
+  },
+  {
+    "title": "EXAMPLE ONLY — Lunar New Year Gathering",
+    "date": "2026-02-08",
+    "time": "",
+    "location": "Example venue",
+    "description": "Sample past event for the semester archive; not an actual AAA event listing.",
+    "image": "",
+    "url": ""
+  },
+  {
+    "title": "EXAMPLE ONLY — Autumn Social",
+    "date": "2025-10-19",
+    "time": "",
+    "location": "Example venue",
+    "description": "Sample past event for the semester archive; not an actual AAA event listing.",
+    "image": "",
+    "url": ""
+  },
+  {
+    "title": "EXAMPLE ONLY — Spring Potluck",
+    "date": "2025-04-02",
+    "time": "",
+    "location": "Example venue",
+    "description": "Sample past event for the semester archive; not an actual AAA event listing.",
+    "image": "",
+    "url": ""
+  }
+]
