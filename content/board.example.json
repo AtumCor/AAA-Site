@@ -1,0 +1,16 @@
+[
+  {
+    "name": "New Board Member",
+    "role": "Position / Title",
+    "photo": "",
+    "bio": "A short introduction (optional).",
+    "instagram": ""
+  },
+  {
+    "name": "Another Board Member",
+    "role": "Position / Title",
+    "photo": "",
+    "bio": "",
+    "instagram": ""
+  }
+]

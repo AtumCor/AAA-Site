@@ -80,14 +80,16 @@ content:
     type: file
     path: content/board.json
     format: json
-    list: true
+    list: true # top-level member array; no maximum count
     fields:
       - name: name
         label: Name
         type: string
+        required: true
       - name: role
         label: Position / title
         type: string
+        required: true
       - name: photo
         label: Portrait photo (upload JPG, PNG, or WebP)
         type: image

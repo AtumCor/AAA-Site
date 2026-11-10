@@ -10,6 +10,7 @@
   const main = $('#main');
   const menuButton = $('#menu-toggle');
   const mobileNav = $('#mobile-nav');
+  const umbrellaOverlay = $('#umbrella-transition');
   const icons = {
     arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>',
     external: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>',
@@ -159,7 +160,8 @@
     const colors = ['card-chartreuse', 'card-lavender', 'card-salmon', 'card-mint', 'card-blue', 'card-butter'];
     const image = photo ? `<img loading="lazy" src="${photo}" alt="Portrait of ${name}" />` : `<div class="board-initials" aria-hidden="true">${escapeHtml(initials(person.name))}</div><span class="photo-fallback-caption">PHOTO COMING SOON</span>`;
     const social = person.instagram && /^https:\/\//i.test(person.instagram) ? `<a href="${externalUrl(person.instagram)}" target="_blank" rel="noopener noreferrer" class="board-social" aria-label="${name} on Instagram">${icons.insta}</a>` : '';
-    return `<article class="board-card" style="--i:${index}"><div class="board-photo ${colors[index % colors.length]}">${image}<span class="board-index">${String(index + 1).padStart(2, '0')} / AAA</span></div><div class="board-details"><div><span class="board-role">${role}</span><h3>${name}</h3></div>${social}</div><p class="board-bio">${bio}</p></article>`;
+    // Cycle the appearance delays, so even a 30-person board loads promptly.
+    return `<article class="board-card" style="--i:${index % 7}"><div class="board-photo ${colors[index % colors.length]}">${image}</div><div class="board-details"><div><span class="board-role">${role}</span><h3>${name}</h3></div>${social}</div><p class="board-bio">${bio}</p></article>`;
   }
   function board() {
     const s = content.site;
@@ -300,35 +302,45 @@
     hookEventsFilter();
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
+  // The 2D blue umbrella swings into view, faces the visitor, spins and falls.
+  // Timings match the 1550ms keyframes in styles.css; navigation changes near
+  // the moment the umbrella faces forward. This animation is purely decorative.
+  const UMBRELLA_SWAP_MS = 780;
+  const UMBRELLA_TOTAL_MS = 1550;
+  const delay = (ms) => new Promise(resolve => window.setTimeout(resolve, ms));
+
   async function navigate() {
     const route = getRoute();
     if (route === currentRoute) { updateNav(route); return; }
     if (renderLock) { queuedRoute = route; return; }
     renderLock = true;
     const hasPrevious = Boolean(currentRoute);
-    const animate = hasPrevious && !prefersReducedMotion.matches;
-    if (animate) {
-      try {
-        await main.animate([
-          { opacity: 1, transform: 'translateY(0px)', filter: 'blur(0px)' },
-          { opacity: 0, transform: 'translateY(-15px)', filter: 'blur(5px)' }
-        ], { duration: 190, easing: 'ease-in', fill: 'forwards' }).finished;
-      } catch { /* Browser canceled an animation: still switch pages. */ }
+    const animate = hasPrevious && !prefersReducedMotion.matches && Boolean(umbrellaOverlay);
+    try {
+      if (animate) {
+        umbrellaOverlay.classList.add('is-active');
+        // Keep the old page visible as the umbrella arrives, then fade it out.
+        await delay(UMBRELLA_SWAP_MS - 170);
+        main.classList.add('is-transition-out');
+        await delay(170);
+      }
+      displayPage(route);
+      currentRoute = route;
+      if (hasPrevious) main.focus({ preventScroll: true });
+      if (animate) {
+        main.classList.remove('is-transition-out');
+        main.classList.add('is-transition-in');
+        await delay(UMBRELLA_TOTAL_MS - UMBRELLA_SWAP_MS);
+      }
+    } finally {
+      main.classList.remove('is-transition-out', 'is-transition-in');
+      if (umbrellaOverlay) umbrellaOverlay.classList.remove('is-active');
+      renderLock = false;
+      if (queuedRoute && queuedRoute !== currentRoute) {
+        queuedRoute = null;
+        navigate();
+      } else queuedRoute = null;
     }
-    displayPage(route);
-    currentRoute = route;
-    if (animate) {
-      const animation = main.animate([
-        { opacity: 0, transform: 'translateY(22px)', filter: 'blur(5px)' },
-        { opacity: 1, transform: 'translateY(0px)', filter: 'blur(0px)' }
-      ], { duration: 450, easing: 'cubic-bezier(.2,.8,.2,1)', fill: 'both' });
-      await animation.finished.catch(() => {});
-    }
-    renderLock = false;
-    if (queuedRoute && queuedRoute !== currentRoute) {
-      queuedRoute = null;
-      navigate();
-    } else queuedRoute = null;
   }
   function closeMenu() {
     mobileNav.hidden = true;

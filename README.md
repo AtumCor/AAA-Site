@@ -9,9 +9,9 @@ A colorful, fast, mobile-friendly website for the **Asian American Association a
 ## What is included?
 
 - Home, Our Story, The Board, Events, and Contact pages.
-- Smooth animated transitions between pages (including a reduced-motion accessibility option).
+- A custom **blue umbrella transition** between pages: the umbrella swings down from above, turns to face the visitor, spins, then falls off the bottom. The lightweight 2D illusion uses only SVG and CSS (no video, 3D library, or build step). It is skipped on first load and for visitors who prefer reduced motion.
 - Responsive design and mobile navigation.
-- Editable executive board cards with name, photo, title, bio, and optional Instagram link.
+- **Unlimited executive board members**: add, delete, or reorder any number of people in Pages CMS or `content/board.json`. Cards automatically flow into new rows at desktop, tablet, and phone sizes. Portraits are free of numbering overlays.
 - Events page with upcoming event cards, photo flyers, and a browseable archive grouped by past semester. When an event date passes, it disappears from the homepage upcoming list and moves automatically into the archive.
 - An Instagram *highlights* section: add links to real posts and optionally upload cover images. Clicking each card opens that post.
 - Instagram profile link and an email-based collaboration form that opens a draft in the visitor's email application.
@@ -57,11 +57,19 @@ Open the visual editor and select the appropriate section:
 | Want to change... | Select... |
 | --- | --- |
 | Organization description, contact email, president name, Instagram profile | Website words & contact info |
-| Board members, headshots, positions | Executive board members |
+| Board members, headshots, positions, and adding more seats | Executive board members → Add item |
 | Upcoming events, older event archives, images, and recap links | Events — upcoming & past |
 | Featured Instagram posts, captions, cover photos | Instagram highlights |
 
 See [EDITING-GUIDE.md](./EDITING-GUIDE.md) for an officer-friendly handoff document.
+
+## Add more executive board members (no code required)
+
+In **Pages CMS → Executive board members**, choose **Add item** for every additional person. Enter their name, role, and optionally a headshot, short bio, and public Instagram URL. You can add **4, 10, 20, or more**; there is no hard-coded limit or fixed number of placeholder cards. Drag to reorder the list (if offered in the editor); the website displays entries in their saved order. Headshots have **no corner numbering or “02 / AAA” text**.
+
+Without Pages CMS, open `content/board.json` in any text editor. It is a JSON **array**: add another `{ ... }` object with a comma between objects. See `content/board.example.json` for two sample entries (these are examples only and never appear on the published site). The live board file still contains only the originally listed names awaiting officer verification.
+
+The blue umbrella transition lives in `index.html`, `styles.css`, and `app.js`. Editors do not need to change it to update content. It plays when visitors switch between pages (not on initial load): a tilted umbrella drops in from above, turns face-on, spins, then drops offscreen. The effect takes approximately 1.55 seconds; to change the speed, update the four `1550ms` animation durations in `styles.css` **and** `UMBRELLA_TOTAL_MS` plus `UMBRELLA_SWAP_MS` in `app.js`. Visitors with **Reduce motion** enabled see instant navigation instead.
 
 ## Adding events and preserving past semesters
 
@@ -104,7 +112,8 @@ index.html           Page shell, navigation, footer
 styles.css           Visual design, animations, mobile styles
 app.js               Page rendering, page transitions, contact form
 content/site.json    All site words and contact information
-content/board.json   Editable executive board entries
+content/board.json   Editable executive board entries (any number)
+content/board.example.json  Example member objects, NOT displayed
 content/events.json  Editable events (upcoming and archives)
 content/events.example.json  Fictional sample entries, NOT displayed
 content/posts.json   Editable Instagram highlights

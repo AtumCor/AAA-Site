@@ -144,7 +144,6 @@ svg{height:1em;width:1em;flex:none}
 .board-photo img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1;filter:saturate(.9)}
 .board-initials{font:700 clamp(72px,10vw,136px)/1 var(--display);letter-spacing:-.13em;transform:rotate(-8deg);color:#242924;z-index:1;padding-right:12px}
 .photo-fallback-caption{position:absolute;top:20px;left:19px;font-size:9px;letter-spacing:.1em;font-weight:900;z-index:3}
-.board-index{position:absolute;bottom:19px;right:20px;font-size:10px;font-weight:900;letter-spacing:.13em;z-index:3;background:#f7f4edda;padding:5px 8px;border-radius:4px}
 .board-details{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:8px}
 .board-role{font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:900;color:#636960}
 .board-details h3{font:700 clamp(21px,2.2vw,29px) var(--display);letter-spacing:-.065em;margin:5px 0 0}
@@ -258,6 +257,50 @@ svg{height:1em;width:1em;flex:none}
 .footer-links{display:flex;gap:110px;padding-top:10px}.footer-links>div{display:flex;flex-direction:column;align-items:flex-start;gap:19px}.footer-heading{font-size:10px;font-weight:900;letter-spacing:.14em;color:var(--lime);text-transform:uppercase;margin-bottom:6px}.footer-links a{font-size:13px;font-weight:600}.footer-links a:hover{color:var(--lime)}
 .footer-bottom{border-top:1px solid #ffffff40;padding-top:20px;display:flex;justify-content:space-between;gap:20px;color:#b1b5ab;font-size:11px;line-height:1.6}
 .page-corner{display:none}
+/* BLUE UMBRELLA PAGE TRANSITION — simple 2D faux-perspective, no dependencies.
+   Keep duration in sync with UMBRELLA_TOTAL_MS in app.js. */
+.umbrella-transition{position:fixed;inset:0;z-index:1000;overflow:hidden;visibility:hidden;pointer-events:none;isolation:isolate}
+.umbrella-transition.is-active{visibility:visible;pointer-events:auto}
+.umbrella-transition-veil{position:absolute;inset:0;background:linear-gradient(135deg,#0a3b822b,#0b559d46);opacity:0}
+.umbrella-flight{position:absolute;width:clamp(240px,40vw,430px);aspect-ratio:1;left:50%;top:50%;will-change:transform;transform:translate(-50%,-50%) translateY(-120vh) rotate(-35deg) scale(.75);filter:drop-shadow(12px 17px 4px #062b5452)}
+.umbrella-flight svg{position:absolute;inset:0;display:block;width:100%;height:100%;overflow:visible;transform-origin:50% 50%;backface-visibility:hidden}
+.umbrella-side{opacity:1;transform:rotate(-20deg) scale(.84)}
+.umbrella-front{opacity:0;transform:rotate(-45deg) scaleX(.06) scaleY(.8)}
+.umbrella-transition.is-active .umbrella-transition-veil{animation:umbrella-tint 1550ms linear both}
+.umbrella-transition.is-active .umbrella-flight{animation:umbrella-travel 1550ms cubic-bezier(.34,.02,.42,1) both}
+.umbrella-transition.is-active .umbrella-side{animation:umbrella-turn-side 1550ms linear both}
+.umbrella-transition.is-active .umbrella-front{animation:umbrella-turn-front 1550ms linear both}
+.page-root.is-transition-out{opacity:0;transform:translateY(8px);transition:opacity 170ms ease-in,transform 170ms ease-in}
+.page-root.is-transition-in{animation:umbrella-page-arrive 350ms ease-out both}
+@keyframes umbrella-travel{
+  0%{transform:translate(-50%,-50%) translateY(-125vh) rotate(-38deg) scale(.7)}
+  23%{transform:translate(-50%,-50%) translateY(-12vh) rotate(14deg) scale(.9)}
+  40%{transform:translate(-50%,-50%) translateY(0) rotate(-3deg) scale(1)}
+  72%{transform:translate(-50%,-50%) translateY(0) rotate(0) scale(1.06)}
+  79%{transform:translate(-50%,-50%) translateY(0) rotate(5deg) scale(1.03)}
+  100%{transform:translate(-50%,-50%) translateY(128vh) rotate(22deg) scale(.83)}
+}
+@keyframes umbrella-turn-side{
+  0%{opacity:1;transform:rotate(-24deg) scale(.76)}
+  23%{opacity:1;transform:rotate(12deg) scale(.94)}
+  35%{opacity:1;transform:rotate(17deg) scaleX(.65) scaleY(.95)}
+  45%,100%{opacity:0;transform:rotate(22deg) scaleX(.08) scaleY(1)}
+}
+@keyframes umbrella-turn-front{
+  0%,23%{opacity:0;transform:rotate(-48deg) scaleX(.07) scaleY(.82)}
+  34%{opacity:.55;transform:rotate(-27deg) scaleX(.43) scaleY(.87)}
+  46%{opacity:1;transform:rotate(0) scale(1)}
+  58%{opacity:1;transform:rotate(175deg) scale(1.02)}
+  76%{opacity:1;transform:rotate(540deg) scale(1.05)}
+  100%{opacity:1;transform:rotate(645deg) scale(.92)}
+}
+@keyframes umbrella-tint{
+  0%,9%{opacity:0}35%{opacity:.32}50%,73%{opacity:.65}100%{opacity:0}
+}
+@keyframes umbrella-page-arrive{
+  from{opacity:0;transform:translateY(12px)}
+  to{opacity:1;transform:translateY(0)}
+}
 /* animations */
 @keyframes rotate{to{transform:rotate(360deg)}}
 @keyframes float{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-53%)}}
@@ -311,4 +354,5 @@ svg{height:1em;width:1em;flex:none}
   .archive-grid{grid-template-columns:1fr}.archive-tools{align-items:flex-start;flex-direction:column;gap:9px}.archive-tools select{width:100%}.archive-card-media{aspect-ratio:1.5}.event-feature-body{padding:20px 18px;grid-template-columns:60px minmax(0,1fr)}.event-feature-date strong{font-size:35px}.event-feature-copy h3{font-size:23px}.event-feature-media{height:205px}.archive-empty h3{font-size:31px}.events-upcoming-empty h3{font-size:29px}
   .form-line{grid-template-columns:1fr}.email-link{font-size:17px}.contact-primary h2{font-size:34px}.wide-cta{grid-template-columns:1fr}.round-cta{margin-top:12px}
 }
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+@media(max-width:700px){.umbrella-flight{width:min(76vw,360px)}}
+@media(prefers-reduced-motion:reduce){.umbrella-transition{visibility:hidden!important;pointer-events:none!important}.page-root.is-transition-out,.page-root.is-transition-in{opacity:1!important;transform:none!important}html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}

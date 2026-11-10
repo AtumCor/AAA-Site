@@ -45,6 +45,43 @@
       <a href="#/contact" data-route="contact">Work with us <span>05</span></a>
     </nav>
   </header>
+  <!-- Blue umbrella: lightweight SVG + CSS perspective illusion (no libraries or video files). -->
+  <div class="umbrella-transition" id="umbrella-transition" aria-hidden="true">
+    <div class="umbrella-transition-veil"></div>
+    <div class="umbrella-flight">
+      <!-- Tilted side view: this is what swings down from the top. -->
+      <svg class="umbrella-side" viewBox="0 0 500 500" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+        <path d="M250 259v154c0 47-68 64-82 15" fill="none" stroke="#103767" stroke-width="17" stroke-linecap="round" />
+        <path d="M250 261v151" fill="none" stroke="#c9eaff" stroke-width="5" stroke-linecap="round" />
+        <path d="M62 260C90 155 160 103 250 101C340 103 410 155 438 260Q392 232 345 260Q300 232 250 260Q200 232 155 260Q108 232 62 260Z" fill="#2d82da" stroke="#0b396f" stroke-width="8" stroke-linejoin="round" />
+        <path d="M250 101C207 151 174 203 155 260Q200 232 250 260Z" fill="#60b2f3" />
+        <path d="M250 101C291 147 327 202 345 260Q300 232 250 260Z" fill="#1e68ba" />
+        <path d="M250 101v159M250 101C208 151 174 203 155 260M250 101C292 151 326 203 345 260" fill="none" stroke="#0d457e" stroke-width="4" opacity=".56" stroke-linecap="round" />
+        <path d="M108 221c24-44 59-68 84-81" fill="none" stroke="#e3f5ff" stroke-width="10" opacity=".65" stroke-linecap="round" />
+        <circle cx="250" cy="101" r="10" fill="#d6f1ff" stroke="#0b396f" stroke-width="4" />
+      </svg>
+      <!-- Front view: ten blue panels squash into view, spin, then fall away. -->
+      <svg class="umbrella-front" viewBox="0 0 500 500" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+        <g stroke="#164b88" stroke-width="1.6" stroke-linejoin="round">
+          <path d="M250 250 L250.0 46.0 A204 204 0 0 1 369.9 85.0 Z" fill="#2871c7" />
+          <path d="M250 250 L369.9 85.0 A204 204 0 0 1 444.0 187.0 Z" fill="#438fe3" />
+          <path d="M250 250 L444.0 187.0 A204 204 0 0 1 444.0 313.0 Z" fill="#1e68bd" />
+          <path d="M250 250 L444.0 313.0 A204 204 0 0 1 369.9 415.0 Z" fill="#69b3fa" />
+          <path d="M250 250 L369.9 415.0 A204 204 0 0 1 250.0 454.0 Z" fill="#287bcc" />
+          <path d="M250 250 L250.0 454.0 A204 204 0 0 1 130.1 415.0 Z" fill="#4e9ee9" />
+          <path d="M250 250 L130.1 415.0 A204 204 0 0 1 56.0 313.0 Z" fill="#226cbe" />
+          <path d="M250 250 L56.0 313.0 A204 204 0 0 1 56.0 187.0 Z" fill="#6db7f5" />
+          <path d="M250 250 L56.0 187.0 A204 204 0 0 1 130.1 85.0 Z" fill="#286fbe" />
+          <path d="M250 250 L130.1 85.0 A204 204 0 0 1 250.0 46.0 Z" fill="#4b95dd" />
+        </g>
+        <circle cx="250" cy="250" r="204" fill="none" stroke="#0b396f" stroke-width="9" />
+        <circle cx="250" cy="250" r="174" fill="none" stroke="#d4efff" stroke-opacity=".23" stroke-width="3" />
+        <path d="M133 94Q182 66 221 59" fill="none" stroke="#f0faff" stroke-width="11" stroke-linecap="round" opacity=".55" />
+        <circle cx="250" cy="250" r="18" fill="#d7f3ff" stroke="#0b396f" stroke-width="7" />
+        <circle cx="244" cy="243" r="5" fill="#fff" />
+      </svg>
+    </div>
+  </div>
   <main id="main" class="page-root" tabindex="-1">
     <div class="loading-state" role="status"><span class="loading-burst">✳</span><span>Finding your people...</span></div>
   </main>
