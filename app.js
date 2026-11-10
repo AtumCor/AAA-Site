@@ -26,6 +26,7 @@
     heroLineOne: 'YOUR PEOPLE.',
     heroLineTwo: 'YOUR PLACE.',
     heroDescription: 'A community for connection, culture, and showing up as your whole self.',
+    heroLogo: './assets/uploads/aaa-umbrella-logo.png',
     mission: 'Building community and leadership for Asian American students at Ohio State.',
     story: 'Since the 1970s, AAA has helped students find connection at Ohio State.',
     boardLabel: 'Leadership & executive board',
@@ -45,6 +46,15 @@
   let renderLock = false;
   let queuedRoute = null;
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  // If the public directory image is temporarily unavailable, show the bundled logo fallback.
+  document.addEventListener('error', (event) => {
+    const image = event.target;
+    if (image instanceof HTMLImageElement && image.classList.contains('hero-logo-image') && !image.dataset.fallback) {
+      image.dataset.fallback = 'true';
+      image.src = './assets/aaa-logo-fallback.svg';
+    }
+  }, true);
+
 
   function escapeHtml(value) {
     return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[char]));
@@ -126,9 +136,11 @@
           <div class="hero-buttons">${btn('Get to know us', 'about')}<a href="${instaLink()}" target="_blank" rel="noopener noreferrer" class="button button-outline">Find us on Instagram ${icons.external}</a></div>
           <div class="hero-bottom"><div class="stacked-dots"><i></i><i></i><i></i><i></i></div><span>Culture. Connection. Community.</span></div>
         </div>
-        <div class="hero-art" aria-label="Colorful geometric illustration celebrating community" role="img">
+        <div class="hero-art" aria-label="Asian American Association logo in a colorful welcome card" role="group">
           <div class="art-grain"></div><span class="art-small-text">A LITTLE COMMUNITY,<br/>A LOT OF HEART.</span>
-          <div class="flower" aria-hidden="true"><div class="flower-petal p1"></div><div class="flower-petal p2"></div><div class="flower-petal p3"></div><div class="flower-petal p4"></div><div class="flower-petal p5"></div><div class="flower-petal p6"></div><div class="flower-center">AAA</div></div>
+          <div class="hero-logo" aria-label="Asian American Association official logo">
+            <img class="hero-logo-image" src="${imageUrl(s.heroLogo || fallback.heroLogo)}" alt="Asian American Association logo" loading="eager" fetchpriority="high" />
+          </div>
           <div class="art-bottom"><span>YOU BELONG HERE</span><span>✦ &nbsp; 001 / ∞</span></div>
           <div class="orbit-label">made of<br/>many stories</div>
         </div>

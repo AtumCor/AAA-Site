@@ -11,6 +11,7 @@ A colorful, fast, mobile-friendly website for the **Asian American Association a
 - Home, Our Story, The Board, Events, and Contact pages.
 - A custom **blue umbrella transition** between pages: the umbrella swings down from above, turns to face the visitor, spins, then falls off the bottom. The lightweight 2D illusion uses only SVG and CSS (no video, 3D library, or build step). It is skipped on first load and for visitors who prefer reduced motion.
 - Responsive design and mobile navigation.
+- Official AAA logo displayed in the homepage hero instead of the decorative flower; replace it through Pages CMS or `content/site.json` (field `heroLogo`). The default URL is the logo from Ohio State Student Activities; a bundled SVG fallback is shown if that image can’t load.
 - **Unlimited executive board members**: add, delete, or reorder any number of people in Pages CMS or `content/board.json`. Cards automatically flow into new rows at desktop, tablet, and phone sizes. Portraits are free of numbering overlays.
 - Events page with upcoming event cards, photo flyers, and a browseable archive grouped by past semester. When an event date passes, it disappears from the homepage upcoming list and moves automatically into the archive.
 - An Instagram *highlights* section: add links to real posts and optionally upload cover images. Clicking each card opens that post.
@@ -70,6 +71,12 @@ In **Pages CMS → Executive board members**, choose **Add item** for every addi
 Without Pages CMS, open `content/board.json` in any text editor. It is a JSON **array**: add another `{ ... }` object with a comma between objects. See `content/board.example.json` for two sample entries (these are examples only and never appear on the published site). The live board file still contains only the originally listed names awaiting officer verification.
 
 The blue umbrella transition lives in `index.html`, `styles.css`, and `app.js`. Editors do not need to change it to update content. It plays when visitors switch between pages (not on initial load): a tilted umbrella drops in from above, turns face-on, spins, then drops offscreen. The effect takes approximately 1.55 seconds; to change the speed, update the four `1550ms` animation durations in `styles.css` **and** `UMBRELLA_TOTAL_MS` plus `UMBRELLA_SWAP_MS` in `app.js`. Visitors with **Reduce motion** enabled see instant navigation instead.
+
+## Change the homepage logo
+
+The homepage's illustrated flower has been replaced with the AAA logo shown on [Ohio State Student Activities](https://activities.osu.edu/posts/studentorgs/logos/aaa-logo-640x480_1.png). It is currently loaded from the official listing, with a local fallback (`assets/aaa-logo-fallback.svg`) for offline viewing.
+
+To use AAA's own high-resolution/updated branding instead, open **Pages CMS → Website words & contact info → Homepage AAA logo** and upload the logo, preferably a transparent PNG/WebP or SVG. The uploaded image will be used automatically in the same framed card. Without Pages CMS, add the logo file under `assets/uploads/` and set `"heroLogo": "assets/uploads/your-logo.png"` inside `content/site.json`. This approach works for both local Live Server and GitHub Pages project URLs. The flower won't reappear.
 
 ## Adding events and preserving past semesters
 

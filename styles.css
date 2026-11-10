@@ -79,10 +79,11 @@ svg{height:1em;width:1em;flex:none}
 .hero-art::after{content:'';position:absolute;inset:-100%;background:repeating-linear-gradient(120deg,transparent 0 32px,#ffffff0b 32px 33px);pointer-events:none;z-index:5}
 .art-small-text{position:absolute;top:23px;left:23px;z-index:6;font-weight:900;font-size:10px;letter-spacing:.08em;line-height:1.45}
 .art-bottom{position:absolute;bottom:20px;left:21px;right:21px;z-index:6;display:flex;align-items:center;justify-content:space-between;font-size:9px;font-weight:900;letter-spacing:.13em}
-.flower{position:absolute;width:min(85%,370px);aspect-ratio:1;top:49%;left:50%;transform:translate(-50%,-50%);z-index:2;animation:float 6s ease-in-out infinite}
-.flower-petal{position:absolute;left:50%;top:50%;width:40%;height:57%;background:var(--orange);border:2px solid var(--ink);border-radius:55% 55% 45% 45%;transform-origin:50% 95%;transform:translate(-50%,-95%) rotate(var(--angle));box-shadow:inset -11px -5px #ed5d4750}
-.p1{--angle:0deg}.p2{--angle:60deg}.p3{--angle:120deg}.p4{--angle:180deg}.p5{--angle:240deg}.p6{--angle:300deg}
-.flower-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;background:var(--lime);width:120px;height:120px;border:3px solid var(--ink);border-radius:50%;font:700 43px var(--display);letter-spacing:-.13em;box-shadow:0 7px 0 #00000018;z-index:4;padding-right:7px}
+/* The hero features AAA's actual logo instead of the former decorative flower.
+   Swap content/site.json -> heroLogo, or upload another image through Pages CMS. */
+.hero-logo{position:absolute;inset:50% auto auto 50%;transform:translate(-50%,-50%);width:min(78%,384px);aspect-ratio:4/3;z-index:4;display:flex;align-items:center;justify-content:center;border:2px solid var(--ink);border-radius:20px;background:#fff;box-shadow:9px 11px 0 #242924;animation:logo-bob 6s ease-in-out infinite;padding:16px;overflow:hidden}
+.hero-logo-image{width:100%;height:100%;object-fit:contain;display:block;filter:contrast(1.04)}
+@keyframes logo-bob{0%,100%{transform:translate(-50%,-50%) rotate(-3deg)}50%{transform:translate(-50%,-53%) rotate(-1deg)}}
 .orbit-label{position:absolute;z-index:8;top:17%;right:-14px;width:88px;height:88px;background:var(--ink);color:white;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:10px;font-weight:800;line-height:1.4;transform:rotate(17deg)}
 .ticker{background:var(--lime);border-block:2px solid var(--ink);height:62px;display:flex;align-items:center;overflow:hidden;width:100%;margin-left:0;white-space:nowrap}
 .ticker-track{display:flex;align-items:center;gap:25px;animation:marquee 45s linear infinite;min-width:max-content}
@@ -309,7 +310,7 @@ svg{height:1em;width:1em;flex:none}
 @media(max-width:1180px){
   .section-wrap{width:calc(100% - 80px)}.header-inner{padding-inline:40px}.desktop-nav{gap:20px;padding-left:0}
   .hero-grid{gap:35px;grid-template-columns:1.1fr .9fr}.hero-title{font-size:clamp(57px,6.3vw,84px)}
-  .hero-art{min-height:460px}.flower-center{width:98px;height:98px;font-size:35px}
+  .hero-art{min-height:460px}.hero-logo{width:min(78%,340px)}
   .board-photo{height:310px}.instagram-empty-copy{padding-right:28px}
   .site-footer{padding-inline:40px}
 }
@@ -330,7 +331,7 @@ svg{height:1em;width:1em;flex:none}
   .announcement{font-size:8px;height:31px;gap:10px;letter-spacing:.09em}
   .header-inner{height:69px;padding:0 20px}.brand-mark{font-size:34px}.brand-copy{font-size:8px}.header-actions .nav-cta{display:none}
   .hero-grid{display:flex;flex-direction:column;padding-top:45px;gap:42px}.hero-copy{align-items:flex-start}.hero-title{font-size:clamp(50px,11.4vw,81px);margin:27px 0}.hero-title .hero-outline{-webkit-text-stroke:1.5px var(--ink)}
-  .hero-art{min-height:420px;box-shadow:6px 7px 0 var(--ink)}.flower{width:min(78%,315px)}.flower-center{width:105px;height:105px}.orbit-label{right:0}
+  .hero-art{min-height:420px;box-shadow:6px 7px 0 var(--ink)}.hero-logo{width:min(80%,335px);padding:12px;box-shadow:6px 8px 0 var(--ink)}.orbit-label{right:0}
   .hero-bottom{margin-top:35px}.ticker{height:55px}.ticker-track span{font-size:16px}
   .intro-section{grid-template-columns:1fr;gap:25px}.intro-heading h2{font-size:49px}.intro-copy{padding-left:0;border-left:0}.intro-copy p{font-size:16px}.mini-sun{font-size:43px}
   .values-strip{grid-template-columns:1fr}.values-strip div,.values-strip div:first-child{padding:18px 6px;border-right:0;border-bottom:1px solid var(--line)}.values-strip div:last-child{border-bottom:0}.values-strip strong{font-size:20px}
@@ -348,7 +349,7 @@ svg{height:1em;width:1em;flex:none}
   .site-footer{padding:60px 20px 25px}.footer-top{flex-direction:column;padding-bottom:58px;gap:46px}.footer-logo{font-size:100px}.footer-links{width:100%;justify-content:space-between;gap:25px;padding-right:15px}.footer-bottom{flex-direction:column;gap:8px}
 }
 @media(max-width:420px){
-  .hero-title{font-size:clamp(42px,10.6vw,57px)}.hero-art{min-height:350px}.flower{width:min(85%,280px)}.flower-center{width:85px;height:85px;font-size:31px}.hero-buttons .button{width:100%;justify-content:space-between}
+  .hero-title{font-size:clamp(42px,10.6vw,57px)}.hero-art{min-height:350px}.hero-logo{width:min(76%,290px);padding:10px}.hero-buttons .button{width:100%;justify-content:space-between}
   .board-grid{grid-template-columns:1fr}.board-photo{height:350px}.board-details h3{font-size:27px}
   .page-hero h1{font-size:clamp(43px,10.7vw,60px)}.post-grid{grid-template-columns:1fr}.mockup{width:120px;height:193px}.mockup-1{transform:translate(33px,15px) rotate(-16deg)}.mockup-3{transform:translate(-33px,20px) rotate(15deg)}
   .archive-grid{grid-template-columns:1fr}.archive-tools{align-items:flex-start;flex-direction:column;gap:9px}.archive-tools select{width:100%}.archive-card-media{aspect-ratio:1.5}.event-feature-body{padding:20px 18px;grid-template-columns:60px minmax(0,1fr)}.event-feature-date strong{font-size:35px}.event-feature-copy h3{font-size:23px}.event-feature-media{height:205px}.archive-empty h3{font-size:31px}.events-upcoming-empty h3{font-size:29px}

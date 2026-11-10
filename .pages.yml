@@ -35,6 +35,9 @@ content:
       - name: heroDescription
         label: Homepage introduction
         type: text
+      - name: heroLogo
+        label: Homepage AAA logo (upload a PNG, SVG, or WebP; leave blank for the default)
+        type: image
       - name: mission
         label: Mission statement
         type: text

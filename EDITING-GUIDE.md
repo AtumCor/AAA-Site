@@ -65,3 +65,11 @@ Open **Website words & contact info** and change the **President's name**, **Col
 - [ ] Remove access for past officers and grant it to current maintainers.
 
 *For technical deployment and file details, see README.md.*
+
+## Change the homepage AAA logo
+
+1. Open **Website words & contact info** in Pages CMS.
+2. Find **Homepage AAA logo**, and upload the new logo (PNG, WebP, or SVG).
+3. Save. The homepage card updates when GitHub Pages republishes.
+
+To make the change without Pages CMS, place your file in `assets/uploads/` and change `heroLogo` in `content/site.json` to `assets/uploads/your-logo.png`. The logo is displayed on a white framed card against the colorful homepage background.
