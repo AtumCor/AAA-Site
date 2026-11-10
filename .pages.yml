@@ -1,0 +1,149 @@
+# Pages CMS: app.pagescms.org
+# Visual editing for nontechnical AAA e-board members.
+# Saving changes edits these JSON files on GitHub; Pages republishes the site.
+media:
+  input: assets/uploads
+  output: /assets/uploads
+  categories: [image]
+  rename: safe
+
+content:
+  - name: site
+    label: Website words & contact info
+    type: file
+    path: content/site.json
+    format: json
+    fields:
+      - name: organizationName
+        label: Organization name
+        type: string
+      - name: shortName
+        label: Short name
+        type: string
+      - name: school
+        label: University name
+        type: string
+      - name: heroEyebrow
+        label: Small text above the homepage heading
+        type: string
+      - name: heroLineOne
+        label: Homepage main heading — first line
+        type: string
+      - name: heroLineTwo
+        label: Homepage main heading — second line
+        type: string
+      - name: heroDescription
+        label: Homepage introduction
+        type: text
+      - name: mission
+        label: Mission statement
+        type: text
+      - name: story
+        label: Our story
+        type: text
+      - name: boardLabel
+        label: Label above the e-board heading
+        type: string
+      - name: boardYear
+        label: E-board term label (example 2026–2027)
+        type: string
+      - name: meetingInfo
+        label: Meeting information
+        type: text
+      - name: instagramUsername
+        label: Instagram username without @
+        type: string
+      - name: instagramUrl
+        label: Full Instagram profile link
+        type: string
+      - name: generalEmail
+        label: General organization email
+        type: string
+      - name: presidentName
+        label: President's name (blank means 'The AAA President')
+        type: string
+      - name: presidentEmail
+        label: Collaboration inbox (president email)
+        type: string
+      - name: collaborationPrompt
+        label: Text above the contact section
+        type: text
+      - name: contactNote
+        label: Small note below the contact email
+        type: text
+      - name: campusLocation
+        label: Campus location
+        type: string
+
+  - name: board
+    label: Executive board members
+    type: file
+    path: content/board.json
+    format: json
+    list: true
+    fields:
+      - name: name
+        label: Name
+        type: string
+      - name: role
+        label: Position / title
+        type: string
+      - name: photo
+        label: Portrait photo (upload JPG, PNG, or WebP)
+        type: image
+      - name: bio
+        label: Short bio (optional)
+        type: text
+      - name: instagram
+        label: Personal Instagram URL (optional)
+        type: string
+
+  - name: events
+    label: Events & meetings
+    type: file
+    path: content/events.json
+    format: json
+    list: true
+    fields:
+      - name: title
+        label: Event name
+        type: string
+      - name: date
+        label: Date (YYYY-MM-DD)
+        type: date
+        options:
+          time: false
+          format: yyyy-MM-dd
+      - name: location
+        label: Location
+        type: string
+      - name: description
+        label: Short description
+        type: text
+      - name: url
+        label: RSVP / event link (optional)
+        type: string
+
+  - name: posts
+    label: Instagram highlights
+    type: file
+    path: content/posts.json
+    format: json
+    list: true
+    fields:
+      - name: title
+        label: Short title
+        type: string
+      - name: caption
+        label: Short description
+        type: text
+      - name: image
+        label: Preview photo (upload to the site)
+        type: image
+      - name: url
+        label: Link to the actual Instagram post or reel
+        type: string
+
+settings:
+  content:
+    merge: true

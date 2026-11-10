@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f4ed" />
+  <meta name="description" content="Asian American Association at The Ohio State University. A place for community, culture, advocacy, and belonging." />
+  <meta property="og:title" content="Asian American Association | Ohio State" />
+  <meta property="og:description" content="Your people. Your place. Join AAA at Ohio State." />
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <title>AAA — Asian American Association at Ohio State</title>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <div class="announcement"><span class="announcement-star">✳</span><span>Building community at Ohio State since the 1970s.</span><span class="announcement-star">✳</span></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#/" data-route="home" aria-label="AAA, go to home">
+        <span class="brand-mark">AAA<span class="brand-dot">.</span></span>
+        <span class="brand-copy">ASIAN AMERICAN<br />ASSOCIATION</span>
+      </a>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="#/" data-route="home">Home</a>
+        <a href="#/about" data-route="about">Our story</a>
+        <a href="#/board" data-route="board">The board</a>
+        <a href="#/campus" data-route="campus">Campus life</a>
+      </nav>
+      <div class="header-actions">
+        <a class="nav-cta" href="#/contact" data-route="contact">Work with us <span aria-hidden="true">↗</span></a>
+        <button class="menu-toggle" type="button" id="menu-toggle" aria-label="Open navigation menu" aria-controls="mobile-nav" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation" hidden>
+      <a href="#/" data-route="home">Home <span>01</span></a>
+      <a href="#/about" data-route="about">Our story <span>02</span></a>
+      <a href="#/board" data-route="board">The board <span>03</span></a>
+      <a href="#/campus" data-route="campus">Campus life <span>04</span></a>
+      <a href="#/contact" data-route="contact">Work with us <span>05</span></a>
+    </nav>
+  </header>
+  <main id="main" class="page-root" tabindex="-1">
+    <div class="loading-state" role="status"><span class="loading-burst">✳</span><span>Finding your people...</span></div>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">AAA<span>.</span></div>
+        <p>Big community energy.<br />Made with love at Ohio State.</p>
+      </div>
+      <div class="footer-links">
+        <div><span class="footer-heading">Explore</span><a href="#/about" data-route="about">Our story</a><a href="#/board" data-route="board">E-board</a><a href="#/campus" data-route="campus">Campus life</a></div>
+        <div><span class="footer-heading">Connect</span><a id="footer-instagram" href="https://www.instagram.com/aaaohiostate/" target="_blank" rel="noopener noreferrer">Instagram ↗</a><a id="footer-email" href="mailto:aaaohiostate@gmail.com">Email AAA ↗</a><a href="#/contact" data-route="contact">Collaborate</a></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><span>© <span id="footer-year"></span> Asian American Association. Student-led with heart.</span><span>Columbus, Ohio · The Ohio State University</span></div>
+  </footer>
+  <div class="page-corner" aria-hidden="true">AAA / OSU</div>
+</body>
+</html>
