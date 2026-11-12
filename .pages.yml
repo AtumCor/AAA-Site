@@ -9,11 +9,16 @@ media:
 
 content:
   - name: site
-    label: Website words & contact info
+    label: Website settings & contact info
     type: file
     path: content/site.json
     format: json
     fields:
+      - name: showEventsPage
+        label: Show Events page
+        type: boolean
+        default: false
+        description: Turn this on only when your team is ready to maintain event listings. Off hides the page, menu links and homepage events section.
       - name: organizationName
         label: Organization name
         type: string

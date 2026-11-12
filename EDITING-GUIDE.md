@@ -15,12 +15,20 @@
 2. Edit a member's **name**, **position**, and optional **short bio**. Upload a new portrait photo, or leave it blank for the initials design.
 3. To add **more members**, click **Add item**. You can add as many people as the current e-board needs—4, 10, 20, or more. Delete past members and rearrange the list to set the display order. The page automatically creates more rows.
 4. Board photos do **not** have numbered “02 / AAA” labels anymore. A missing picture will show the member’s initials until a headshot is ready.
-5. Open **Website words & contact info** and change **E-board term label**, **President's name**, and **Collaboration inbox**.
+5. Open **Website settings & contact info** and change **E-board term label**, **President's name**, and **Collaboration inbox**.
 6. Remove previous members' access to the editor/repository; invite the new media or tech chairs. Never share passwords.
 
 **Editing without Pages CMS?** Open `content/board.json` in VS Code, insert another entry in the JSON array, and save. Look at `content/board.example.json` for the field names, then preview using Live Server. Keep commas between member objects.
 
 **Navigation animation:** A blue umbrella swings in from the top, faces forward, spins, and drops below the screen when switching between pages—representing AAA's umbrella role for APIDA organizations. It is automatic; there is nothing to update in the editor. Visitors who enable reduced-motion accessibility settings skip the animation.
+
+## Show or hide the Events page
+
+1. Open **Website settings & contact info** in Pages CMS.
+2. Find **Show Events page**. Turn it **on** if your team is actively updating events, or **off** if no one is maintaining the calendar.
+3. Save. When off, the Events page disappears from the main menu, mobile menu, footer, and homepage. Old event entries remain saved; switching it back on restores them.
+
+The page is **off by default**. You can still edit event listings in Pages CMS while the page is hidden. Direct links to the hidden Events page return visitors to Home.
 
 ## Adding upcoming AND past events
 
@@ -45,7 +53,7 @@
 
 ## Changing the contact information
 
-Open **Website words & contact info** and change the **President's name**, **Collaboration inbox**, or **General organization email**. We recommend keeping these as shared organization inboxes rather than student personal email accounts.
+Open **Website settings & contact info** and change the **President's name**, **Collaboration inbox**, or **General organization email**. We recommend keeping these as shared organization inboxes rather than student personal email accounts.
 
 ## Troubleshooting
 
@@ -68,7 +76,7 @@ Open **Website words & contact info** and change the **President's name**, **Col
 
 ## Change the homepage AAA logo
 
-1. Open **Website words & contact info** in Pages CMS.
+1. Open **Website settings & contact info** in Pages CMS.
 2. Find **Homepage AAA logo**, and upload the new logo (PNG, WebP, or SVG).
 3. Save. The homepage card updates when GitHub Pages republishes.
 

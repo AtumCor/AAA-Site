@@ -22,6 +22,7 @@
     organizationName: 'Asian American Association',
     shortName: 'AAA',
     school: 'The Ohio State University',
+    showEventsPage: false,
     heroEyebrow: 'THE OHIO STATE UNIVERSITY / EST. 1970s',
     heroLineOne: 'YOUR PEOPLE.',
     heroLineTwo: 'YOUR PLACE.',
@@ -151,7 +152,7 @@
         <div class="intro-copy"><div class="mini-sun" aria-hidden="true">✳</div><p>${escapeHtml(s.mission)}</p><a href="#/about" data-route="about" class="text-link">More about our story ${icons.arrow}</a></div>
       </section>
       <section class="values-strip section-wrap"><div><span>01 /</span><strong>Find your people</strong></div><div><span>02 /</span><strong>Celebrate culture</strong></div><div><span>03 /</span><strong>Make an impact</strong></div></section>
-      <section class="section-wrap section-space happenings"><div class="section-top">${sectionTag('03', 'ON THE CALENDAR')}<a href="#/events" data-route="events" class="text-link">Explore all events ${icons.arrow}</a></div><h2 class="section-title">What’s <span class="highlighted">happening?</span></h2>${eventSection(2)}</section>
+      ${s.showEventsPage === true ? `<section class="section-wrap section-space happenings"><div class="section-top">${sectionTag('03', 'ON THE CALENDAR')}<a href="#/events" data-route="events" class="text-link">Explore all events ${icons.arrow}</a></div><h2 class="section-title">What’s <span class="highlighted">happening?</span></h2>${eventSection(2)}</section>` : ''}
       <section class="wide-cta section-wrap"><div class="cta-graphic" aria-hidden="true"><span>✳</span></div><div><span class="mini-caps">NEW FRIENDS START SOMEWHERE</span><h2>Come as you are.<br/>Leave with community.</h2><p>Whether it’s your first event or your fiftieth, there’s room for you.</p></div><a href="${instaLink()}" target="_blank" rel="noopener noreferrer" class="round-cta" aria-label="Visit our Instagram">${icons.external}</a></section>
     `;
   }
@@ -296,6 +297,14 @@
       window.location.href = link;
     });
   }
+  function syncEventsVisibility() {
+    const enabled = content.site.showEventsPage === true;
+    document.querySelectorAll('[data-route="events"]').forEach(link => {
+      link.hidden = !enabled;
+      // Inline display is needed because mobile-nav CSS sets display:flex on links.
+      link.style.display = enabled ? '' : 'none';
+    });
+  }
   function updateNav(route) {
     document.querySelectorAll('[data-route]').forEach(link => {
       const isActive = link.dataset.route === route;
@@ -322,7 +331,12 @@
   const delay = (ms) => new Promise(resolve => window.setTimeout(resolve, ms));
 
   async function navigate() {
-    const route = getRoute();
+    const requestedRoute = getRoute();
+    const route = requestedRoute === 'events' && content.site.showEventsPage !== true ? 'home' : requestedRoute;
+    if (route !== requestedRoute) {
+      // Even manually entered #/events and the older #/campus alias go home when disabled.
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}#/`);
+    }
     if (route === currentRoute) { updateNav(route); return; }
     if (renderLock) { queuedRoute = route; return; }
     renderLock = true;
@@ -398,6 +412,7 @@
     };
     $('#footer-instagram').href = instaLink();
     $('#footer-email').href = `mailto:${cleanEmail(content.site.generalEmail)}`;
+    syncEventsVisibility();
     navigate();
   }
   init();
