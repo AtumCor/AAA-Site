@@ -46,7 +46,6 @@
   let currentRoute = '';
   let renderLock = false;
   let queuedRoute = null;
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   // If the public directory image is temporarily unavailable, show the bundled logo fallback.
   document.addEventListener('error', (event) => {
     const image = event.target;
@@ -341,9 +340,13 @@
     if (renderLock) { queuedRoute = route; return; }
     renderLock = true;
     const hasPrevious = Boolean(currentRoute);
-    const animate = hasPrevious && !prefersReducedMotion.matches && Boolean(umbrellaOverlay);
+    const animate = Boolean(umbrellaOverlay);
     try {
       if (animate) {
+        // A queued route can start before the browser paints the previous reset.
+        // Force a style flush so the CSS umbrella animation always replays.
+        umbrellaOverlay.classList.remove('is-active');
+        void umbrellaOverlay.offsetWidth;
         umbrellaOverlay.classList.add('is-active');
         // Keep the old page visible as the umbrella arrives, then fade it out.
         await delay(UMBRELLA_SWAP_MS - 170);

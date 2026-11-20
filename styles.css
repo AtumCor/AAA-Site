@@ -2959,24 +2959,3 @@ svg {
     width: min(76vw, 360px);
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .umbrella-transition {
-    visibility: hidden !important;
-    pointer-events: none !important;
-  }
-  .page-root.is-transition-out,
-  .page-root.is-transition-in {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-  html {
-    scroll-behavior: auto;
-  }
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
-  }
-}
